@@ -7,6 +7,17 @@
    	<meta name="viewport" content="widget=device-width">
 </head>
 <body>
-	About Me
+
+	<nav>
+		<ul>
+			@section('nav')
+				<li>Home</li>
+				<li>About</li>
+			@show
+		</ul>
+	</nav>
+	<div class="container">
+		@yield('content')
+	</div>
 </body>
 </html>

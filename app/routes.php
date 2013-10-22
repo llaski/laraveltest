@@ -18,5 +18,29 @@ Route::get('/', function()
 
 Route::get('about', function()
 {
-	return View::make('home.about');
+	$data = array(
+		'greeting' => 'Hello',
+		'thing' => 'People!',
+		'items' => array(
+			'apple',
+			'plum',
+			'banana'
+		)
+	);
+
+	return View::make('home.about', $data);
+});
+
+Route::get('posts', function()
+{
+	//"Raw Queries"
+	// $title = 'Another Post';
+	// $body = 'Another Day';
+
+	// DB::insert('INSERT INTO posts (title, body) VALUES (?, ?)', array($title, $body));
+
+	// $posts = DB::select('SELECT * FROM posts');
+	// Helpers::dd($posts);
+
+	// Fluent Query Builder
 });
