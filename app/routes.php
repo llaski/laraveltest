@@ -100,3 +100,23 @@ Route::get('orm', function()
 	$user->password = Hash::make('1234');
 	$user->save();
 });
+
+
+
+Route::get('url-shortner', function()
+{
+	return View::make('urlshortner.index');
+});
+
+Route::post('url-shortner', function()
+{
+	return Input::all();
+
+	//Validate URL
+
+	//If url exists, return it
+
+	//Otherwise add new row and return shortened url
+
+	//Create routes view to present url to user
+});
