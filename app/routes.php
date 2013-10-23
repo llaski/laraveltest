@@ -80,3 +80,23 @@ Route::get('query', function()
 	echo '<pre>';
 	print_r($posts);
 });
+
+Route::get('orm', function()
+{
+	// $users = User::all();
+	// $users = User::find(1);
+	// $users = User::all();
+
+	// return View::make('home.orm')->with('users', $users);
+
+	$email = 'llaski@resolute.com';
+	$password = '1234';
+
+	$users = User::whereEmailAndPassword($email, $password)->first();
+	// Helpers::dd($users);
+
+	$user = new User;
+	$user->email = 'larry.laski@gmail.com';
+	$user->password = Hash::make('1234');
+	$user->save();
+});
