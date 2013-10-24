@@ -102,6 +102,7 @@ Route::get('orm', function()
 });
 
 
+/* Route URL Shortner Project */
 
 Route::get('url-shortner', function()
 {
@@ -110,13 +111,60 @@ Route::get('url-shortner', function()
 
 Route::post('url-shortner', function()
 {
-	return Input::all();
+	$url = Input::get('url');
 
 	//Validate URL
 
 	//If url exists, return it
+	$record = Url::whereUrl($url)->first();
 
-	//Otherwise add new row and return shortened url
+	if ($record)
+	{
+		return View::make('urlshortner.show')
+				->with('shortened', $record->shortened);
+	}
+	else
+	{
+		function get_unique_short_url()
+		{
+			$shortened = base_convert(rand(10000, 99999), 10, 36);
 
-	//Create routes view to present url to user
+			if (Url::whereShortened($shortened)->first())
+				get_unique_short_url();
+
+			return $shortened;
+		}
+
+		$shortened = get_unique_short_url();
+
+
+		//Otherwise add new row and return shortened url
+		$row = Url::create(array(
+			'url' => $url,
+			'shortened' => $shortened
+		));
+
+		//Create routes view to present url to user
+		if ($row)
+			return View::make('urlshortner.show')
+				->with('shortened', $row->shortened);
+		else
+			return 'Error creating record';
+	}
 });
+
+Route::any('{all}', function($shortened)
+{
+	//Query db for row with short url
+	$row = Url::whereShortened($shortened)->first();
+
+	//if not found, redirect to home page
+	if ( is_null($row))
+		return Redirect::to('/url-shortner');
+	else
+		return Redirect::to($row->url);
+	
+	
+	//if found, redirect to url
+
+})->where('all', '.*');
