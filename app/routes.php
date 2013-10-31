@@ -11,25 +11,48 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+// Route::get('/', function()
+// {
+// 	return View::make('hello');
+// });
 
-Route::get('about', function()
-{
-	$data = array(
-		'greeting' => 'Hello',
-		'thing' => 'People!',
-		'items' => array(
-			'apple',
-			'plum',
-			'banana'
-		)
+Route::get('/', 'HomeController@getIndex');
+Route::get('about', 'HomeController@getAbout');
+Route::controller('home', 'HomeController');
+
+
+Route::get('users/{username}/edit', 'UsersController@getEdit');
+Route::put('users/{username}', 'UsersController@putUpdate');
+Route::delete('users/{username}', 'UsersController@deleteUpdate');
+Route::controller('users', 'UsersController');
+
+
+
+Route::get('movies', array('as' => 'movies', 'uses' => 'MoviesController@index'));
+Route::get('movies/new', array('as' => 'new_movie', 'uses' => 'MoviesController@create'));
+Route::get('movies/{name}', array('as' => 'movie', 'uses' => 'MoviesController@show'));
+// Route::resource('movies', 'MoviesController');
+
+Route::get('admin', 'AdminController@index');
+Route::get('admin/preferences', 'AdminPreferencesController@index');
+
+
+Route::get('/auth', function(){
+	$credentials = array(
+		'email' => 'llaski@resolute.com',
+		'password' => 'llaski123'
 	);
 
-	return View::make('home.about', $data);
+	// $user = User::find(1);
+	// $user->password = Hash::make('llaski123');
+	// $user->save();
+
+	if (Auth::attempt($credentials))
+		return 'Valid User';
+	else
+		return 'Invalid User';
 });
+
 
 Route::get('posts', function()
 {
@@ -114,6 +137,10 @@ Route::post('url-shortner', function()
 	$url = Input::get('url');
 
 	//Validate URL
+	$v = Url::validate(array('url' => $url));
+
+	if ( $v !== TRUE)
+		return Redirect::to('url-shortner')->withErrors($v->messages());
 
 	//If url exists, return it
 	$record = Url::whereUrl($url)->first();
@@ -125,23 +152,10 @@ Route::post('url-shortner', function()
 	}
 	else
 	{
-		function get_unique_short_url()
-		{
-			$shortened = base_convert(rand(10000, 99999), 10, 36);
-
-			if (Url::whereShortened($shortened)->first())
-				get_unique_short_url();
-
-			return $shortened;
-		}
-
-		$shortened = get_unique_short_url();
-
-
 		//Otherwise add new row and return shortened url
 		$row = Url::create(array(
 			'url' => $url,
-			'shortened' => $shortened
+			'shortened' => Url::get_unique_short_url()
 		));
 
 		//Create routes view to present url to user
@@ -164,7 +178,4 @@ Route::any('{all}', function($shortened)
 	else
 		return Redirect::to($row->url);
 	
-	
-	//if found, redirect to url
-
 })->where('all', '.*');
