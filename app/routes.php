@@ -67,7 +67,18 @@ Route::get('posts', function()
 
 	// Fluent Query Builder
 
-	return View::make('home.about');
+	// return View::make('home.about');
+	// $post = new Post(array(
+	// 	'title' => 'First Post',
+	// 	'body' => 'Body Of Post'
+	// ));
+
+	// Author::find(1)->posts()->save($post);
+
+	// $posts = Author::find(1)->posts;
+	// Helpers::dd($posts);
+
+	Helpers::dd(Post::find(1)->author);
 });
 
 Route::get('query', function()
@@ -177,5 +188,4 @@ Route::any('{all}', function($shortened)
 		return Redirect::to('/url-shortner');
 	else
 		return Redirect::to($row->url);
-	
 })->where('all', '.*');
