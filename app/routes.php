@@ -81,6 +81,13 @@ Route::get('posts', function()
 	Helpers::dd(Post::find(1)->author);
 });
 
+Route::get('authors/{author_id}/posts', function($author_id) {
+	$posts = Post::with('author')->where('author_id', '=', $author_id)->get();
+	// $posts = Author::find($author_id)->posts()->get();
+
+	return View::make('posts.index')->with('posts', $posts);
+});
+
 Route::get('query', function()
 {
 	// $posts = DB::table('posts')->get(); //SELECT * FROM posts
