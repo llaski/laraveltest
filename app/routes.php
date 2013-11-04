@@ -185,6 +185,12 @@ Route::post('url-shortner', function()
 	}
 });
 
+Route::get('/snippets/{new?}', array('as' => 'new_snippet', 'uses' => 'SnippetsController@create'))->where('new', 'new');
+Route::post('/snippets/store', 'SnippetsController@store');
+Route::get('/snippets/show/{id}',array('as' => 'show_snippet', 'uses' => 'SnippetsController@show'))->where('id', '[0-9]+');
+
+// Route::resource('snippets', 'SnippetsController');
+
 Route::any('{all}', function($shortened)
 {
 	//Query db for row with short url
