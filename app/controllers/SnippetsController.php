@@ -17,9 +17,17 @@ class SnippetsController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($default_snippet = '')
 	{
-        return View::make('snippets.create');
+		$validation_errors = Snippet::validate(Form::get());
+
+		if ($validation_errors)
+			return $validation_errors;
+		else
+		{
+        	return View::make('snippets.create')
+        			->with('snippet', $default_snippet);
+        }
 	}
 
 	/**
@@ -49,7 +57,10 @@ class SnippetsController extends BaseController {
 	{
 		$snippet = Snippet::find($id);
 
-        return View::make('snippets.show', $snippet->toArray());
+		if ($snippet)
+        	return View::make('snippets.show', $snippet->toArray());
+        else
+        	Redirect::route('new_snippet');
 	}
 
 	/**
@@ -83,6 +94,22 @@ class SnippetsController extends BaseController {
 	public function destroy($id)
 	{
 		//
+	}
+
+	/**
+	 * Fork Snippet
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function fork($id)
+	{
+		$snippet = Snippet::find($id);
+
+		if ( ! $snippet)
+			Redirect::to_route('new_snippet');
+		else
+			return $this->create($snippet->snippet);
 	}
 
 }
