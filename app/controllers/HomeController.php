@@ -15,24 +15,9 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function getIndex()
+	public function showWelcome()
 	{
-		return View::make('home.index');
-	}
-
-	public function getAbout()
-	{
-		$data = array(
-			'greeting' => 'Hello',
-			'thing' => 'People!',
-			'items' => array(
-				'apple',
-				'plum',
-				'banana'
-			)
-		);
-
-		return View::make('home.about', $data);
+		return View::make('hello');
 	}
 
 }
