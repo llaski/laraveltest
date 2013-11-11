@@ -15,3 +15,15 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+// Route::resource('photos', 'PhotosController');
+
+//Route Binding
+Route::model('photo', 'Photo');
+Route::get('photos/{photo}', function(Photo $photo){
+	return $photo;
+})->where('id', '\d+');
+
+// Route::resource('lists', 'ListsController');
+// Route::resource('lists.tasks', 'TasksController');
+Route::resource('tasks', 'TasksController');
