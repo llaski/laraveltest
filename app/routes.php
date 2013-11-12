@@ -27,3 +27,15 @@ Route::get('photos/{photo}', function(Photo $photo){
 // Route::resource('lists', 'ListsController');
 // Route::resource('lists.tasks', 'TasksController');
 Route::resource('tasks', 'TasksController');
+
+Route::get('/mail', function()
+{
+	$data = ['name' => 'Guy'];
+	Mail::pretend();
+	Mail::send('emails.welcome', $data, function($message)
+	{
+		$message->to('larrylaski@gmail.com')->subject('Welcome!');
+	});
+
+	return 'Sent';
+});
