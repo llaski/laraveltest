@@ -1,7 +1,8 @@
 <?php
 
-class Post extends BaseModel {
-	protected $guarded = array('id');
+namespace Services\Validators;
+
+class Post extends Validator {
 
 	public static $rules = [
 		'title' => 'required',

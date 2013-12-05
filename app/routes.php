@@ -39,3 +39,24 @@ Route::get('/mail', function()
 
 	return 'Sent';
 });
+
+Route::get('/mailers', function()
+{
+	$obj = test::Instance();
+	$ob2 = test::Instance();
+	$ob3 = test::Instance();
+	echo '<pre>';
+	print_r($obj);
+	echo '<br>';
+	print_r($ob2);
+	echo '<br>';
+	dd($ob3);
+	$user = User::first();
+
+	$mailer = new Mailers\UserMailer($user);
+	// $mailer->welcome()->deliver();
+});
+
+Route::resource('posts', 'PostsController');
+
+Route::resource('posts', 'PostsController');
