@@ -1,27 +1,17 @@
 <?php
 
-class BaseModel extends Eloquent {
-
+class BaseModel extends Eloquent
+{
 	public $errors;
-	protected static $rules = [];
-
-	public static function boot()
-	{
-		parent::boot();
-
-		static::saving(function($post){
-			return $post->validate();
-		});
-	}
+	public static $rules = [];
 
 	public function validate()
 	{
-		$validation = Validator::make($this->attributes, static::$rules);
+		$v = Validator::make($this->attributes, static::$rules);
 
-		if ($validation->passes())
-			return true;
+		if ($v->passes()) return true;
 
-		$this->errors = $validation->messages();
+		$this->errors = $v->messages();
 
 		return false;
 	}

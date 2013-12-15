@@ -3,8 +3,12 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+class User extends BaseModel implements UserInterface, RemindableInterface {
 
+	public static $rules = [
+		'name' => 'required',
+		'name' => 'required|email|unique:users'
+	];
 	/**
 	 * The database table used by the model.
 	 *
@@ -47,6 +51,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function getReminderEmail()
 	{
 		return $this->email;
+	}
+
+	public function setPasswordAttribute($password)
+	{
+		$this->attributes['password'] = Hash::make($password);
 	}
 
 }
